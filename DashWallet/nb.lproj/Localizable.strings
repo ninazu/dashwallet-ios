@@ -1,5 +1,9 @@
+
 /* No comment provided by engineer. */
-"%@ is for 'bits'. %@ = 1 dash." = "%1$@ er for \"bits\". %2$@ = 1 dash.";
+" and " = " and ";
+
+/* No comment provided by engineer. */
+"%@ is for 'mDASH'. %@ = 1 DASH." = "%@ is for 'mDASH'. %@ = 1 DASH.";
 
 /* No comment provided by engineer. */
 "%@ is not allowed to access the camera" = "%@ har ikke tilgang til kameraet";
@@ -9,6 +13,9 @@
 
 /* No comment provided by engineer. */
 "%d confirmations" = "%d bekreftelser";
+
+/* No comment provided by engineer. */
+", " = ", ";
 
 /* No comment provided by engineer. */
 "0 confirmations" = "0 bekreftelser";
@@ -29,6 +36,9 @@
 "\n%d attempts remaining\n" = "\n%d forsøk igjen\n";
 
 /* No comment provided by engineer. */
+"\n(local requested amount: %@)" = "\n(local requested amount: %@)";
+
+/* No comment provided by engineer. */
 "\n1 attempt remaining\n" = "\n1 forsøk igjen\n";
 
 /* No comment provided by engineer. */
@@ -38,7 +48,7 @@
 "\nA device passcode is needed to safeguard your wallet. Go to settings and turn passcode on to continue." = "\nEn pinkode er nødvendig for å sikre lommeboken din. Gå til innstillinger og slå på pinkode for å fortsette.";
 
 /* No comment provided by engineer. */
-"\nADDRESS ALREADY USED\n\ndash addresses are intended for single use only\n\nre-use reduces privacy for both you and the recipient and can result in loss if the recipient doesn't directly control the address" = "\nADRESSE ALLEREDE BRUKT\n\ndash-adresser er kun ment for engangsbruk\n\ngjenbruk reduserer personvern for både deg og mottageren og kan resultere i tap av midler om mottager ikke direkte kontrollerer adressen";
+"\nADDRESS ALREADY USED\ndash addresses are intended for single use only\n\nre-use reduces privacy for both you and the recipient and can result in loss if the recipient doesn't directly control the address" = "\nADDRESS ALREADY USED\ndash addresses are intended for single use only\n\nre-use reduces privacy for both you and the recipient and can result in loss if the recipient doesn't directly control the address";
 
 /* No comment provided by engineer. */
 "\nallow camera access in\nSettings->Privacy->Camera->%@" = "\ntillat kameratilgang i\nInnstillinger->Personvern->Kamera->%@";
@@ -56,6 +66,9 @@
 "\nNEVER type your recovery phrase into\npassword managers or elsewhere.\nOther devices may be infected.\n" = "\nSKRIV ALDRI opp din gjenopprettingsfrase\ni en passordbehandler eller andre steder.\nAndre enheter kan være kompromittert.\n";
 
 /* No comment provided by engineer. */
+"\ntry again in %@" = "\ntry again in %@";
+
+/* No comment provided by engineer. */
 "\ntry again in %d %@" = "\nprøv igjen om %1$d %2$@";
 
 /* No comment provided by engineer. */
@@ -66,6 +79,15 @@
 
 /* No comment provided by engineer. */
 "amount too small" = "beløpet er for lavt";
+
+/* No comment provided by engineer. */
+"Application %@ is requesting a payment to" = "Application %@ is requesting a payment to";
+
+/* No comment provided by engineer. */
+"Application %@ is requesting an address so it can pay you.  Would you like to authorize this?" = "Application %@ is requesting an address so it can pay you.  Would you like to authorize this?";
+
+/* No comment provided by engineer. */
+"Application %@ would like to receive your Master Public Key.  This can be used to keep track of your wallet, this can not be used to move your Dash." = "Application %@ would like to receive your Master Public Key.  This can be used to keep track of your wallet, this can not be used to move your Dash.";
 
 /* No comment provided by engineer. */
 "bad password, try again" = "feil passord, prøv igjen";
@@ -83,28 +105,19 @@
 "bad recovery phrase" = "feil gjenoppretingsfrase";
 
 /* No comment provided by engineer. */
-"bad signature" = "feil signatur";
+"Bitcoin address (shapeshift)" = "Bitcoin address (shapeshift)";
 
 /* No comment provided by engineer. */
-"Dash address" = "Dash-adresse";
-
-/* No comment provided by engineer. */
-"Dash addresses can also be copied to the clipboard. A dash address always starts with 'X' or '7'." = "Dash-adresser kan også kopieres til utklippstavlen. En Dash-adresse starter alltid med 'X' eller '7'.";
-
-/* No comment provided by engineer. */
-"dash network fee" = "dash nettverksavgift";
-
-/* No comment provided by engineer. */
-"dash payments can't be less than %@" = "beløp for dash-betalinger kan ikke være lavere enn %@";
-
-/* No comment provided by engineer. */
-"dash transaction not signed" = "dash-transaksjon ikke signert";
-
-/* No comment provided by engineer. */
-"dash transaction outputs can't be less than %@" = "output for dash-transaksjon kan ikke være lavere enn %@";
+"bitcoin payments can't be less than %@" = "bitcoin payments can't be less than %@";
 
 /* No comment provided by engineer. */
 "block #%d of %d" = "blokk #%1$d of %2$d";
+
+/* No comment provided by engineer. */
+"Buy Dash" = "Buy Dash";
+
+/* No comment provided by engineer. */
+"Buy dash in dashwallet!" = "Buy dash in dashwallet!";
 
 /* No comment provided by engineer. */
 "cancel" = "avbryt";
@@ -128,13 +141,19 @@
 "choose passcode for %@" = "velg pinkode for %@";
 
 /* No comment provided by engineer. */
-"clipboard doesn't contain a valid dash or bitcoin address" = "utklippstavlen inneholder ikke en gyldig Dash eller Bitcoin-adresse";
+"clear" = "clear";
+
+/* No comment provided by engineer. */
+"clear trusted node?" = "clear trusted node?";
+
+/* No comment provided by engineer. */
+"clipboard doesn't contain a valid dash or bitcoin address" = "clipboard doesn't contain a valid dash or bitcoin address";
 
 /* No comment provided by engineer. */
 "close app" = "avslutt app";
 
-/* No comment provided by engineer. */
-"CONFIRM WIPE" = "BEKREFT SLETTING";
+/* confirm */
+"confirm" = "confirm";
 
 /* No comment provided by engineer. */
 "confirmed in block #%d" = "bekreftet i blokk #%d";
@@ -170,6 +189,24 @@
 "couldn't transmit payment to dash network" = "kunne ikke kringkaste betaling til Dash-nettverket";
 
 /* No comment provided by engineer. */
+"Dash address" = "Dash-adresse";
+
+/* No comment provided by engineer. */
+"Dash addresses can also be copied to the clipboard. A dash address always starts with 'X' or '7'." = "Dash-adresser kan også kopieres til utklippstavlen. En Dash-adresse starter alltid med 'X' eller '7'.";
+
+/* No comment provided by engineer. */
+"dash network fee" = "dash nettverksavgift";
+
+/* No comment provided by engineer. */
+"dash payments can't be less than %@" = "beløp for dash-betalinger kan ikke være lavere enn %@";
+
+/* No comment provided by engineer. */
+"dash transaction not signed" = "dash-transaksjon ikke signert";
+
+/* No comment provided by engineer. */
+"dash transaction outputs can't be less than %@" = "output for dash-transaksjon kan ikke være lavere enn %@";
+
+/* No comment provided by engineer. */
 "DEVICE SECURITY COMPROMISED\nAny 'jailbreak' app can access any other app's keychain data (and steal your dash)." = "SIKKERHETEN TIL ENHETEN ER KOMPROMITTERT\nEnhver 'jailbreak'-app kan få tilgang til andre appers Keychain data (og stjele dine dash).";
 
 /* No comment provided by engineer. */
@@ -188,6 +225,15 @@
 "email not configured" = "epost ikke konfigurert";
 
 /* No comment provided by engineer. */
+"enable" = "enable";
+
+/* No comment provided by engineer. */
+"enable receive notifications" = "enable receive notifications";
+
+/* No comment provided by engineer. */
+"enter" = "enter";
+
+/* No comment provided by engineer. */
 "enter old passcode" = "angi eldre pinkode";
 
 /* No comment provided by engineer. */
@@ -195,6 +241,12 @@
 
 /* No comment provided by engineer. */
 "error signing transaction" = "feil ved signering av transaksjon";
+
+/* No comment provided by engineer. */
+"exit" = "exit";
+
+/* No comment provided by engineer. */
+"failed wallet update" = "failed wallet update";
 
 /* No comment provided by engineer. */
 "from:" = "fra:";
@@ -209,6 +261,9 @@
 "id:" = "id:";
 
 /* No comment provided by engineer. */
+"If you still would like to wipe it please input : \"I accept that I will lose my coins if I no longer possess the recovery phrase\"" = "If you still would like to wipe it please input : \"I accept that I will lose my coins if I no longer possess the recovery phrase\"";
+
+/* No comment provided by engineer. */
 "ignore" = "ignorer";
 
 /* No comment provided by engineer. */
@@ -216,6 +271,12 @@
 
 /* No comment provided by engineer. */
 "IMPORTANT" = "VIKTIG";
+
+/* No comment provided by engineer. */
+"instant payment" = "instant payment";
+
+/* No comment provided by engineer. */
+"Instant Send requires enough inputs with 6 confirmations, send anyways as regular transaction?" = "Instant Send requires enough inputs with 6 confirmations, send anyways as regular transaction?";
 
 /* No comment provided by engineer. */
 "insufficient funds" = "utilstrekkelige midler";
@@ -257,13 +318,13 @@
 "not a dash or bitcoin QR code" = "ikke en Dash eller Bitcoin QR-kode";
 
 /* No comment provided by engineer. */
+"not a valid bitcoin address" = "ikke en gyldig Bitcoin-adresse";
+
+/* No comment provided by engineer. */
 "not a valid dash address" = "ikke en gyldig Dash-adresse";
 
 /* No comment provided by engineer. */
 "not a valid dash or bitcoin address" = "ikke en gyldig Dash eller Bitcoin adresse";
-
-/* No comment provided by engineer. */
-"not a valid bitcoin address" = "ikke en gyldig Bitcoin-adresse";
 
 /* No comment provided by engineer. */
 "not a valid private key" = "ikke en gyldig privat nøkkel";
@@ -273,6 +334,9 @@
 
 /* No comment provided by engineer. */
 "ok" = "ok";
+
+/* No comment provided by engineer. */
+"OK" = "OK";
 
 /* No comment provided by engineer. */
 "passcode" = "pinkode";
@@ -299,7 +363,13 @@
 "payment output" = "betalingsutgang";
 
 /* No comment provided by engineer. */
-"post-dated" = "fremdatert";
+"pending" = "pending";
+
+/* No comment provided by engineer. */
+"please enter pin to upgrade wallet" = "please enter pin to upgrade wallet";
+
+/* No comment provided by engineer. */
+"rate: %@ = %@\nupdated: %@\nblock #%d of %d\nconnected peers: %d\ndl peer: %@" = "rate: %@ = %@\nupdated: %@\nblock #%d of %d\nconnected peers: %d\ndl peer: %@";
 
 /* No comment provided by engineer. */
 "Receive dash at this address: %@" = "Motta dash på denne adressen: %@";
@@ -310,7 +380,7 @@
 /* No comment provided by engineer. */
 "received %@ (%@)" = "mottok %1$@ (%2$@)";
 
-/* No comment provided by engineer. */
+/* recovery phrase */
 "recovery phrase" = "gjenopprettingsfrase";
 
 /* No comment provided by engineer. */
@@ -332,6 +402,9 @@
 "request expired" = "forespørselen har utløpt";
 
 /* No comment provided by engineer. */
+"request is for an instant payment but you have disabled instant payments" = "request is for an instant payment but you have disabled instant payments";
+
+/* No comment provided by engineer. */
 "requested network \"%@\" instead of \"%@\"" = "ber om nettverk \"%1$@\" i stedet for \"%2$@\"";
 
 /* No comment provided by engineer. */
@@ -347,7 +420,10 @@
 "reset" = "tilbakestill";
 
 /* No comment provided by engineer. */
-"Scan someone else's QR code to get their dash address. You can send a payment to anyone with an address." = "Skann andres QR-kode for å få deres Dash-adresse. Du kan sende betaling til alle som har en adresse.";
+"retry" = "retry";
+
+/* No comment provided by engineer. */
+"Scan someone else's QR code to get their dash or bitcoin address. You can send a payment to anyone with an address." = "Scan someone else's QR code to get their dash or bitcoin address. You can send a payment to anyone with an address.";
 
 /* No comment provided by engineer. */
 "Screenshots are visible to other apps and devices. Generate a new recovery phrase and keep it secret." = "Skjermbilder er synlige for andre programmer og enheter. Generer en ny gjenopprettingsfrase og hold den hemmelig.";
@@ -356,7 +432,16 @@
 "Screenshots are visible to other apps and devices. Your funds are at risk. Transfer your balance to another wallet." = "Skjermbilder er synlige for andre programmer og enheter. Dine dash er ikke sikre. Overføre saldoen til en annen lommebok.";
 
 /* No comment provided by engineer. */
+"second" = "second";
+
+/* No comment provided by engineer. */
+"seconds" = "seconds";
+
+/* No comment provided by engineer. */
 "seen by %d of %d peers" = "sett av %1$d av %2$d peers";
+
+/* No comment provided by engineer. */
+"send" = "send";
 
 /* No comment provided by engineer. */
 "Send %@ (%@) from this private key into your wallet? The dash network will receive a fee of %@ (%@)." = "send %1$@ (%2$@) fra denne private nøkkelen til din lommebok? Dash-nettverket vil motta en avgift på %3$@ (%4$@).";
@@ -380,7 +465,22 @@
 "sent!" = "sendt!";
 
 /* No comment provided by engineer. */
+"set a trusted node" = "set a trusted node";
+
+/* No comment provided by engineer. */
 "settings" = "innstillinger";
+
+/* No comment provided by engineer. */
+"shapeshift bitcoin id:" = "shapeshift bitcoin id:";
+
+/* No comment provided by engineer. */
+"shapeshift failed" = "shapeshift failed";
+
+/* No comment provided by engineer. */
+"shapeshift status:" = "shapeshift status:";
+
+/* No comment provided by engineer. */
+"shapeshift succeeded" = "shapeshift succeeded";
 
 /* No comment provided by engineer. */
 "show" = "vis";
@@ -398,19 +498,31 @@
 "spent input" = "brukt input";
 
 /* No comment provided by engineer. */
+"Starting Shapeshift!" = "Starting Shapeshift!";
+
+/* No comment provided by engineer. */
 "status:" = "status:";
 
 /* No comment provided by engineer. */
 "swept!" = "sweeped!";
 
 /* No comment provided by engineer. */
-"Syncing:" = "Synkroniserer:";
+"Syncing:" = "Syncing:";
+
+/* No comment provided by engineer. */
+"The amount you wanted to shapeshift is too high, please input a value under %@" = "The amount you wanted to shapeshift is too high, please input a value under %@";
+
+/* No comment provided by engineer. */
+"The amount you wanted to shapeshift is too low, please input a value over %@" = "The amount you wanted to shapeshift is too low, please input a value over %@";
 
 /* No comment provided by engineer. */
 "the app will now close" = "appen vil nå avsluttes";
 
 /* No comment provided by engineer. */
 "This is your dash address. Tap to copy it or send it by email or sms. The address will change each time you receive funds, but old addresses always work." = "Dette er din Dash-adresse. Trykk for å kopiere den eller sende den via epost eller SMS. Denne adressen vil endres hver gang du mottar midler, men eldre adresser fungerer alltid.";
+
+/* No comment provided by engineer. */
+"This is your dash balance." = "This is your dash balance.";
 
 /* No comment provided by engineer. */
 "This is your dash balance. Dash is a currency. The exchange rate changes with the market." = "Dette er mengden dash du har. Dash er en valuta. Vekslingskursen flyter med markedet.";
@@ -425,10 +537,22 @@
 "this private key is empty" = "denne private nøkkelen er tom";
 
 /* No comment provided by engineer. */
+"This request requires an instant payment but you do not have enough inputs with 6 confirmations required by Instant Send, you may ask the merchant to accept a normal transaction or wait a few minutes." = "This request requires an instant payment but you do not have enough inputs with 6 confirmations required by Instant Send, you may ask the merchant to accept a normal transaction or wait a few minutes.";
+
+/* No comment provided by engineer. */
+"this request requires an instant payment but you have disabled instant payments" = "this request requires an instant payment but you have disabled instant payments";
+
+/* No comment provided by engineer. */
+"This wallet is not empty or sync has not finished, you may not wipe it without the recovery phrase" = "This wallet is not empty or sync has not finished, you may not wipe it without the recovery phrase";
+
+/* No comment provided by engineer. */
 "to:" = "til:";
 
 /* No comment provided by engineer. */
 "to: %@" = "to: %@";
+
+/* No comment provided by engineer. */
+"to: %@ (via Shapeshift)" = "to: %@ (via Shapeshift)";
 
 /* No comment provided by engineer. */
 "touch id limit" = "grense for Touch ID";
@@ -446,13 +570,19 @@
 "transaction history" = "transaksjonshistorie";
 
 /* No comment provided by engineer. */
-"transaction is post-dated" = "transaksjonen er fremdatert";
-
-/* No comment provided by engineer. */
 "transaction rejected" = "transaksjonen er avvist";
 
 /* No comment provided by engineer. */
+"trust" = "trust";
+
+/* No comment provided by engineer. */
+"Try It!" = "Try It!";
+
+/* No comment provided by engineer. */
 "turn device passcode on" = "aktiver enhetspassord";
+
+/* No comment provided by engineer. */
+"Unable to get new qr code" = "Unable to get new qr code";
 
 /* No comment provided by engineer. */
 "unexpected response from %@" = "Uventet svar fra %@";
@@ -478,6 +608,9 @@
 /* No comment provided by engineer. */
 "unverified" = "ubekreftet";
 
+/* Updating Price */
+"Updating Price" = "Updating Price";
+
 /* No comment provided by engineer. */
 "verified, waiting for confirmation" = "verifisert, venter på bekreftelse";
 
@@ -498,6 +631,12 @@
 
 /* No comment provided by engineer. */
 "WRITE DOWN YOUR RECOVERY PHRASE" = "SKRIV NED DIN GJENOPPRETTINGSFRASE";
+
+/* No comment provided by engineer. */
+"You can now buy dash in\ndashwallet with cash or\nbank transfer." = "You can now buy dash in\ndashwallet with cash or\nbank transfer.";
+
+/* No comment provided by engineer. */
+"you must enter your pin in order to enter dashwallet" = "you must enter your pin in order to enter dashwallet";
 
 /* No comment provided by engineer. */
 "you received dash!" = "du har mottatt dash!";

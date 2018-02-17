@@ -55,6 +55,7 @@ typedef void (^ResetCancelHandlerBlock)(void);
 
 @property (nonatomic, readonly) BRWallet * _Nullable wallet;
 @property (nonatomic, readonly) BOOL noWallet; // true if keychain is available and we know that no wallet exists on it
+@property (nonatomic, readonly) BOOL noOldWallet; // true if keychain is available and we know that no old wallet exists on it
 @property (nonatomic, readonly) BOOL watchOnly; // true if this is a "watch only" wallet with no signing ability
 @property (nonatomic, strong) id<BRKeySequence> _Nullable sequence;
 @property (nonatomic, strong) id<BRMnemonic> _Nullable mnemonic;
@@ -115,6 +116,7 @@ completion:(void (^ _Nonnull)(BRTransaction * _Nonnull tx, uint64_t fee, NSError
 - (NSString * _Nonnull)bitcoinCurrencyStringForAmount:(int64_t)amount;
 - (NSString * _Nonnull)localCurrencyStringForDashAmount:(int64_t)amount;
 - (NSString * _Nonnull)localCurrencyStringForBitcoinAmount:(int64_t)amount;
+- (NSNumber * _Nullable)localCurrencyNumberForDashAmount:(int64_t)amount;
 
 -(NSNumber* _Nonnull)localCurrencyDashPrice;
 

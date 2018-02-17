@@ -1114,17 +1114,13 @@
     XCTAssertEqualObjects(xpub,
                           @"xpub6CAqVZYbGiQCTyzzvvueEoBy8M74VWtPywf2F3zpwbS8AugDSSMSLcewpDaRQxVCxtL4kbTbWb1fzWg2R5933ECsxrEtKBA4gkJu8quduHs",
                           @"[BRBIP32Sequence serializedMasterPublicKey:depth:]");
+    
+    NSData * deserializedMpk = [seq deserializedMasterPublicKey:xpub];
+    
+    XCTAssertEqualObjects(mpk,
+                          deserializedMpk,
+                          @"[BRBIP32Sequence deserializedMasterPublicKey:]");
 }
-
-//- (void)testBIP32SequenceDeserializedMasterPublicKey
-//{
-//    BRBIP32Sequence *seq = [BRBIP32Sequence new];
-//    NSData *mpk = [seq deserializedMasterPublicKey:@"xpub68Gmy5EdvgibQVfPdqkBBCHxA5htiqg55crXYuXoQRKfDBFA1WEjWgP6LHhwBZeNK1VTsfTFUHCdrfp1bgwQ9xv5ski8PX9rL2dZXvgGDnw"];
-//
-//    XCTAssertEqualObjects(mpk,
-//                          [seq extendedPublicKeyForAccount:0 fromSeed:@"000102030405060708090a0b0c0d0e0f".hexToData purpose:BIP32_PURPOSE],
-//                          @"[BRBIP32Sequence deserializedMasterPublicKey:]");
-//}
 
 // MARK: - testWallet
 
@@ -1309,7 +1305,7 @@
                                                                   flags:BLOOM_UPDATE_ALL];
     
     [f insertData:@"99108ad8ed9bb6274d3980bab5a85c048f0950c8".hexToData];
-    
+    NSLog(@"fpRate = %.5f",f.falsePositiveRate);
     XCTAssertTrue([f containsData:@"99108ad8ed9bb6274d3980bab5a85c048f0950c8".hexToData],
                   @"[BRBloomFilter containsData:]");
     
@@ -1318,12 +1314,12 @@
                    @"[BRBloomFilter containsData:]");
     
     [f insertData:@"b5a2c786d9ef4658287ced5914b37a1b4aa32eee".hexToData];
-    
+    NSLog(@"fpRate = %.5f",f.falsePositiveRate);
     XCTAssertTrue([f containsData:@"b5a2c786d9ef4658287ced5914b37a1b4aa32eee".hexToData],
                   @"[BRBloomFilter containsData:]");
     
     [f insertData:@"b9300670b4c5366e95b2699e8b18bc75e5f729c5".hexToData];
-    
+    NSLog(@"fpRate = %.5f",f.falsePositiveRate);
     XCTAssertTrue([f containsData:@"b9300670b4c5366e95b2699e8b18bc75e5f729c5".hexToData],
                   @"[BRBloomFilter containsData:]");
     

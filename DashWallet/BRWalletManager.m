@@ -416,6 +416,13 @@ typedef BOOL (^PinVerificationBlock)(NSString * _Nonnull currentPin,BRWalletMana
     if (_wallet) return NO;
     if (getKeychainData(EXTENDED_0_PUBKEY_KEY_BIP44, &error) || error) return NO;
     if (getKeychainData(EXTENDED_0_PUBKEY_KEY_BIP32, &error) || error) return NO;
+    return YES;
+}
+
+- (BOOL)noOldWallet
+{
+    NSError *error = nil;
+    if (_wallet) return NO;
     if (getKeychainData(MASTER_PUBKEY_KEY_BIP44, &error) || error) return NO;
     if (getKeychainData(MASTER_PUBKEY_KEY_BIP32, &error) || error) return NO;
     return YES;
@@ -507,6 +514,8 @@ typedef BOOL (^PinVerificationBlock)(NSString * _Nonnull currentPin,BRWalletMana
         setKeychainData(nil, CREATION_TIME_KEY, NO);
         setKeychainData(nil, EXTENDED_0_PUBKEY_KEY_BIP44, NO);
         setKeychainData(nil, EXTENDED_0_PUBKEY_KEY_BIP32, NO);
+        setKeychainData(nil, MASTER_PUBKEY_KEY_BIP32, NO); //for sanity
+        setKeychainData(nil, MASTER_PUBKEY_KEY_BIP44, NO); //for sanity
         setKeychainData(nil, SPEND_LIMIT_KEY, NO);
         setKeychainData(nil, PIN_KEY, NO);
         setKeychainData(nil, PIN_FAIL_COUNT_KEY, NO);
@@ -544,8 +553,10 @@ typedef BOOL (^PinVerificationBlock)(NSString * _Nonnull currentPin,BRWalletMana
             masterPubKeyBIP44 = [NSData data]; // watch only wallet
             masterPubKeyBIP32 = [NSData data];
         }
-        setKeychainData(masterPubKeyBIP44, EXTENDED_0_PUBKEY_KEY_BIP44, NO);
-        setKeychainData(masterPubKeyBIP32, EXTENDED_0_PUBKEY_KEY_BIP32, NO);
+        if (seedPhrase) {
+            setKeychainData(masterPubKeyBIP44, EXTENDED_0_PUBKEY_KEY_BIP44, NO);
+            setKeychainData(masterPubKeyBIP32, EXTENDED_0_PUBKEY_KEY_BIP32, NO);
+        }
         _wallet = nil;
     }
     
@@ -802,7 +813,9 @@ typedef BOOL (^PinVerificationBlock)(NSString * _Nonnull currentPin,BRWalletMana
                                    actionWithTitle:NSLocalizedString(@"cancel", nil)
                                    style:UIAlertActionStyleCancel
                                    handler:^(UIAlertAction * action) {
-                                       resetCancelHandlerBlock();
+                                       if (resetCancelHandlerBlock) {
+                                            resetCancelHandlerBlock();
+                                       }
                                    }];
     [alertController addAction:cancelButton];
     [self presentAlertController:alertController animated:YES completion:nil];
@@ -1111,6 +1124,8 @@ typedef BOOL (^PinVerificationBlock)(NSString * _Nonnull currentPin,BRWalletMana
         if ([currentPin isEqual:previousPin]) {
             context.pinField.text = nil;
             setKeychainString(previousPin, PIN_KEY, NO);
+            [[NSUserDefaults standardUserDefaults] setDouble:[NSDate timeIntervalSinceReferenceDate]
+                                                      forKey:PIN_UNLOCK_TIME_KEY];
             [context.pinField resignFirstResponder];
             [context.pinAlertController dismissViewControllerAnimated:TRUE completion:^{
                 if (completion) completion(YES);
@@ -1831,21 +1846,10 @@ typedef BOOL (^PinVerificationBlock)(NSString * _Nonnull currentPin,BRWalletMana
 
 - (NSString *)localCurrencyStringForDashAmount:(int64_t)amount
 {
-    if (amount == 0) return [self.localFormat stringFromNumber:@(0)];
-    if (!self.localCurrencyBitcoinPrice || !self.bitcoinDashPrice) return NSLocalizedString(@"Updating Price",@"Updating Price");
-    
-    NSNumber * local = [NSNumber numberWithDouble:self.localCurrencyBitcoinPrice.doubleValue*self.bitcoinDashPrice.doubleValue];
-    
-    
-    NSDecimalNumber *n = [[[NSDecimalNumber decimalNumberWithDecimal:local.decimalValue]
-                           decimalNumberByMultiplyingBy:(id)[NSDecimalNumber numberWithLongLong:llabs(amount)]]
-                          decimalNumberByDividingBy:(id)[NSDecimalNumber numberWithLongLong:DUFFS]],
-    *min = [[NSDecimalNumber one]
-            decimalNumberByMultiplyingByPowerOf10:-self.localFormat.maximumFractionDigits];
-    
-    // if the amount is too small to be represented in local currency (but is != 0) then return a string like "$0.01"
-    if ([n compare:min] == NSOrderedAscending) n = min;
-    if (amount < 0) n = [n decimalNumberByMultiplyingBy:(id)[NSDecimalNumber numberWithInt:-1]];
+    NSNumber *n = [self localCurrencyNumberForDashAmount:amount];
+    if (!n) {
+        return NSLocalizedString(@"Updating Price",@"Updating Price");
+    }
     return [self.localFormat stringFromNumber:n];
 }
 
@@ -1866,6 +1870,28 @@ typedef BOOL (^PinVerificationBlock)(NSString * _Nonnull currentPin,BRWalletMana
     return [self.localFormat stringFromNumber:n];
 }
 
+- (NSNumber * _Nullable)localCurrencyNumberForDashAmount:(int64_t)amount {
+    if (amount == 0) {
+        return @0;
+    }
+    
+    if (!self.localCurrencyBitcoinPrice || !self.bitcoinDashPrice) {
+        return nil;
+    }
+    
+    NSNumber *local = [NSNumber numberWithDouble:self.localCurrencyBitcoinPrice.doubleValue*self.bitcoinDashPrice.doubleValue];
+    
+    NSDecimalNumber *n = [[[NSDecimalNumber decimalNumberWithDecimal:local.decimalValue]
+                           decimalNumberByMultiplyingBy:(id)[NSDecimalNumber numberWithLongLong:llabs(amount)]]
+                          decimalNumberByDividingBy:(id)[NSDecimalNumber numberWithLongLong:DUFFS]],
+    *min = [[NSDecimalNumber one]
+            decimalNumberByMultiplyingByPowerOf10:-self.localFormat.maximumFractionDigits];
+    
+    // if the amount is too small to be represented in local currency (but is != 0) then return a string like "$0.01"
+    if ([n compare:min] == NSOrderedAscending) n = min;
+    if (amount < 0) n = [n decimalNumberByMultiplyingBy:(id)[NSDecimalNumber numberWithInt:-1]];
+    return n;
+}
 
 // MARK: - UITextFieldDelegate
 
@@ -1904,20 +1930,34 @@ replacementString:(NSString *)string
             NSString *phrase = [self.mnemonic cleanupPhrase:textField.text];
             
             if (! [phrase isEqual:textField.text]) textField.text = phrase;
-            
-            if (! [[self.sequence extendedPublicKeyForAccount:0 fromSeed:[self.mnemonic deriveKeyFromPhrase:[self.mnemonic
-                                                                                                             normalizePhrase:phrase] withPassphrase:nil] purpose:BIP44_PURPOSE] isEqual:self.extendedBIP44PublicKey]) {
+            NSData * oldData = getKeychainData(MASTER_PUBKEY_KEY_BIP44, nil);
+            NSData * seed = [self.mnemonic deriveKeyFromPhrase:[self.mnemonic
+                                                                normalizePhrase:phrase] withPassphrase:nil];
+            if (self.extendedBIP44PublicKey && ![[self.sequence extendedPublicKeyForAccount:0 fromSeed:seed purpose:BIP44_PURPOSE] isEqual:self.extendedBIP44PublicKey]) {
+                self.resetAlertController.title = NSLocalizedString(@"recovery phrase doesn't match", nil);
+                [self.resetAlertController performSelector:@selector(setTitle:)
+                                                withObject:NSLocalizedString(@"recovery phrase", nil) afterDelay:3.0];
+            } else if (oldData && ![[self.sequence deprecatedIncorrectExtendedPublicKeyForAccount:0 fromSeed:seed purpose:BIP44_PURPOSE] isEqual:oldData]) {
                 self.resetAlertController.title = NSLocalizedString(@"recovery phrase doesn't match", nil);
                 [self.resetAlertController performSelector:@selector(setTitle:)
                                                 withObject:NSLocalizedString(@"recovery phrase", nil) afterDelay:3.0];
             }
             else {
+                if (oldData) {
+                    NSData *masterPubKeyBIP44 = [self.sequence extendedPublicKeyForAccount:0 fromSeed:seed purpose:BIP44_PURPOSE];
+                    NSData *masterPubKeyBIP32 = [self.sequence extendedPublicKeyForAccount:0 fromSeed:seed purpose:BIP32_PURPOSE];
+                    BOOL failed = !setKeychainData(masterPubKeyBIP44, EXTENDED_0_PUBKEY_KEY_BIP44, NO); //new keys
+                    failed = failed | !setKeychainData(masterPubKeyBIP32, EXTENDED_0_PUBKEY_KEY_BIP32, NO); //new keys
+                    failed = failed | !setKeychainData(nil, MASTER_PUBKEY_KEY_BIP44, NO); //old keys
+                    failed = failed | !setKeychainData(nil, MASTER_PUBKEY_KEY_BIP32, NO); //old keys
+                }
                 setKeychainData(nil, SPEND_LIMIT_KEY, NO);
                 setKeychainData(nil, PIN_KEY, NO);
                 setKeychainData(nil, PIN_FAIL_COUNT_KEY, NO);
                 setKeychainData(nil, PIN_FAIL_HEIGHT_KEY, NO);
                 [self.resetAlertController dismissViewControllerAnimated:TRUE completion:^{
-                    [self setPinWithCompletion:nil];
+                    self.pinAlertController = nil;
+                    [self setBrandNewPinWithCompletion:nil];
                 }];
             }
         }

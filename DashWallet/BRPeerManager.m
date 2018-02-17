@@ -60,7 +60,7 @@ static const struct { uint32_t height; const char *hash; uint32_t timestamp; uin
 };
 
 static const char *dns_seeds[] = {
-    "testnet-seed.dashdot.io"//,"testnet-seed.dashpay.info"
+    "testnet-seed.dashdot.io", "test.dnsseed.masternode.io" //,"testnet-seed.dashpay.info"
 };
 
 #else // main net
@@ -110,7 +110,8 @@ static const struct { uint32_t height; const char *hash; uint32_t timestamp; uin
     { 680000, "00000000000012b333e5ba8a85895bcafa8ad3674c2fb8b2de98bf3a5f08fa81", 1496400309, 0x1a64bc7au },
     { 700000, "00000000000002958852d255726d695ecccfbfacfac318a9d0ebc558eecefeb9", 1499552504, 0x1a37e005u },
     { 720000, "0000000000000acfc49b67e8e72c6faa2d057720d13b9052161305654b39b281", 1502702260, 0x1a158e98u },
-    { 740000, "00000000000008d0d8a9054072b0272024a01d1920ab4d5a5eb98584930cbd4c", 1505852282, 0x1a0ab756u }
+    { 740000, "00000000000008d0d8a9054072b0272024a01d1920ab4d5a5eb98584930cbd4c", 1505852282, 0x1a0ab756u },
+    { 760000, "000000000000011131c4a8c6446e6ce4597a192296ecad0fb47a23ae4b506682", 1508998683, 0x1a014ed1u }
 };
 
 static const char *dns_seeds[] = {
@@ -606,7 +607,7 @@ static const char *dns_seeds[] = {
         if (completion) {
             [[BREventManager sharedEventManager] saveEvent:@"peer_manager:not_signed"];
             completion([NSError errorWithDomain:@"DashWallet" code:401 userInfo:@{NSLocalizedDescriptionKey:
-                                                                                      NSLocalizedString(@"bitcoin transaction not signed", nil)}]);
+                                                                                      NSLocalizedString(@"dash transaction not signed", nil)}]);
         }
         
         return;
@@ -615,7 +616,7 @@ static const char *dns_seeds[] = {
         if (completion) {
             [[BREventManager sharedEventManager] saveEvent:@"peer_manager:not_connected"];
             completion([NSError errorWithDomain:@"DashWallet" code:-1009 userInfo:@{NSLocalizedDescriptionKey:
-                                                                                        NSLocalizedString(@"not connected to the bitcoin network", nil)}]);
+                                                                                        NSLocalizedString(@"not connected to the dash network", nil)}]);
         }
         
         return;
@@ -1369,7 +1370,9 @@ static const char *dns_seeds[] = {
 {
     // ignore block headers that are newer than one week before earliestKeyTime (headers have 0 totalTransactions)
     if (block.totalTransactions == 0 &&
-        block.timestamp + WEEK_TIME_INTERVAL > self.earliestKeyTime + NSTimeIntervalSince1970 + 2*HOUR_TIME_INTERVAL) return;
+        block.timestamp + WEEK_TIME_INTERVAL/4 > self.earliestKeyTime + NSTimeIntervalSince1970 + HOUR_TIME_INTERVAL/2) {
+        return;
+    }
     
     NSArray *txHashes = block.txHashes;
     
@@ -1409,7 +1412,7 @@ static const char *dns_seeds[] = {
         NSLog(@"%@:%d relayed orphan block %@, previous %@, last block is %@, height %d", peer.host, peer.port,
               blockHash, prevBlock, uint256_obj(self.lastBlock.blockHash), self.lastBlockHeight);
 #endif
-        
+       
         // ignore orphans older than one week ago
         if (block.timestamp < [NSDate timeIntervalSinceReferenceDate] + NSTimeIntervalSince1970 - 7*24*60*60) return;
         
@@ -1444,8 +1447,9 @@ static const char *dns_seeds[] = {
     // verify block difficulty if block is past last checkpoint
     if ((block.height > (checkpoint_array[CHECKPOINT_COUNT - 1].height + DGW_PAST_BLOCKS_MAX)) &&
         ![block verifyDifficultyWithPreviousBlocks:self.blocks]) {
-        NSLog(@"%@:%d relayed block with invalid difficulty height %d target %x, blockHash: %@", peer.host, peer.port,
-              block.height,block.target, blockHash);
+        uint32_t foundDifficulty = [block darkGravityWaveTargetWithPreviousBlocks:self.blocks];
+        NSLog(@"%@:%d relayed block with invalid difficulty height %d target %x foundTarget %x, blockHash: %@", peer.host, peer.port,
+              block.height,block.target,foundDifficulty, blockHash);
         [self peerMisbehavin:peer];
         return;
     }
@@ -1534,6 +1538,9 @@ static const char *dns_seeds[] = {
         self.lastBlock = block;
         if (block.height == _estimatedBlockHeight) syncDone = YES;
     }
+    
+    //NSLog(@"%@:%d added block at height %d target %x blockHash: %@", peer.host, peer.port,
+    //      block.height,block.target, blockHash);
     
     if (syncDone) { // chain download is complete
         self.syncStartHeight = 0;

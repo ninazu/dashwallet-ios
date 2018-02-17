@@ -36,7 +36,6 @@
 #import "BRPeerManager.h"
 #import "BRWalletManager.h"
 #import "BRPaymentRequest.h"
-#import "BRBIP32Sequence.h"
 #import "UIImage+Utils.h"
 #import "BREventManager.h"
 #import "BREventConfirmView.h"
@@ -47,9 +46,9 @@
 #import <sys/stat.h>
 #import <mach-o/dyld.h>
 
-#define BALANCE_TIP_START NSLocalizedString(@"This is your DASH balance.", nil)
+#define BALANCE_TIP_START NSLocalizedString(@"This is your dash balance.", nil)
 
-#define BALANCE_TIP NSLocalizedString(@"This is your DASH balance. DASH is a currency. "\
+#define BALANCE_TIP NSLocalizedString(@"This is your dash balance. Dash is a currency. "\
 "The exchange rate changes with the market.", nil)
 #define MDASH_TIP    NSLocalizedString(@"%@ is for 'mDASH'. %@ = 1 DASH.", nil)
 
@@ -151,47 +150,22 @@
                                                           }
                                                           
                                                           NSURL * url = note.userInfo[@"url"];
-                                                          if ([url.scheme isEqualToString:@"dashwallet"] && [url.host hasPrefix:@"request"]) {
-                                                              NSArray * array = [url.host componentsSeparatedByString:@"&"];
-                                                              NSMutableDictionary * dictionary = [[NSMutableDictionary alloc] init];
-                                                              for (NSString * param in array) {
-                                                                  NSArray * paramArray = [param componentsSeparatedByString:@"="];
-                                                                  if ([paramArray count] == 2) {
-                                                                      [dictionary setObject:paramArray[1] forKey:paramArray[0]];
-                                                                  }
-                                                              }
-                                                              
-                                                              if (dictionary[@"request"] && dictionary[@"sender"] && (!dictionary[@"account"] || [dictionary[@"account"] isEqualToString:@"0"])) {
-                                                                  [manager authenticateWithPrompt:[NSString stringWithFormat:NSLocalizedString(@"Application %@ would like to receive your Master Public Key.  This can be used to keep track of your wallet, this can not be used to move your Dash.",nil),dictionary[@"sender"]] andTouchId:NO alertIfLockout:YES completion:^(BOOL authenticatedOrSuccess,BOOL cancelled) {
-                                                                      if (authenticatedOrSuccess) {
-                                                                          BRBIP32Sequence *seq = [BRBIP32Sequence new];
-                                                                          NSString * masterPublicKeySerialized = [seq serializedMasterPublicKey:manager.extendedBIP44PublicKey depth:BIP44_PURPOSE_ACCOUNT_DEPTH];
-                                                                          NSString * masterPublicKeyNoPurposeSerialized = [seq serializedMasterPublicKey:manager.extendedBIP32PublicKey depth:BIP32_PURPOSE_ACCOUNT_DEPTH];
-                                                                          NSURL * url = [NSURL URLWithString:[NSString stringWithFormat:@"%@://callback=%@&masterPublicKeyBIP32=%@&masterPublicKeyBIP44=%@&account=%@&source=dashwallet",dictionary[@"sender"],dictionary[@"request"],masterPublicKeyNoPurposeSerialized,masterPublicKeySerialized,@"0"]];
-                                                                          if ([[UIApplication sharedApplication] canOpenURL:url]) {
-                                                                              [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:^(BOOL success) {
-                                                                                  
-                                                                              }];
-                                                                          }
-                                                                      }
-                                                                  }];
-                                                              }
-                                                              
-                                                          } else {
-                                                              
-                                                              
-                                                              BRSendViewController *c = self.sendViewController;
-                                                              
-                                                              [self.pageViewController setViewControllers:(c ? @[c] : @[])
-                                                                                                direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:^(BOOL finished) {
-                                                                                                    _url = note.userInfo[@"url"];
-                                                                                                    
-                                                                                                    if (self.didAppear && [UIApplication sharedApplication].protectedDataAvailable) {
-                                                                                                        _url = nil;
-                                                                                                        [c performSelector:@selector(handleURL:) withObject:note.userInfo[@"url"] afterDelay:0.0];
-                                                                                                    }
-                                                                                                }];
-                                                          }
+                                                          
+                                                          
+                                                          
+                                                          
+                                                          BRSendViewController *c = self.sendViewController;
+                                                          
+                                                          [self.pageViewController setViewControllers:(c ? @[c] : @[])
+                                                                                            direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:^(BOOL finished) {
+                                                                                                _url = note.userInfo[@"url"];
+                                                                                                
+                                                                                                if (self.didAppear && [UIApplication sharedApplication].protectedDataAvailable) {
+                                                                                                    _url = nil;
+                                                                                                    [c performSelector:@selector(handleURL:) withObject:note.userInfo[@"url"] afterDelay:0.0];
+                                                                                                }
+                                                                                            }];
+                                                          
                                                       }
                                                   }];
     
@@ -245,7 +219,7 @@
                                                                                             alertControllerWithTitle:NSLocalizedString(@"WARNING", nil)
                                                                                             message:NSLocalizedString(@"DEVICE SECURITY COMPROMISED\n"
                                                                                                                       "Any 'jailbreak' app can access any other app's keychain data "
-                                                                                                                      "(and steal your bitcoins). "
+                                                                                                                      "(and steal your dash). "
                                                                                                                       "Wipe this wallet immediately and restore on a secure device.", nil)
                                                                                             preferredStyle:UIAlertControllerStyleAlert];
                                                                UIAlertAction* ignoreButton = [UIAlertAction
@@ -273,7 +247,7 @@
                                                                                             alertControllerWithTitle:NSLocalizedString(@"WARNING", nil)
                                                                                             message:NSLocalizedString(@"DEVICE SECURITY COMPROMISED\n"
                                                                                                                       "Any 'jailbreak' app can access any other app's keychain data "
-                                                                                                                      "(and steal your bitcoins).", nil)
+                                                                                                                      "(and steal your dash).", nil)
                                                                                             preferredStyle:UIAlertControllerStyleAlert];
                                                                UIAlertAction* ignoreButton = [UIAlertAction
                                                                                               actionWithTitle:NSLocalizedString(@"ignore", nil)
@@ -452,7 +426,7 @@
                                      alertControllerWithTitle:NSLocalizedString(@"WARNING", nil)
                                      message:NSLocalizedString(@"DEVICE SECURITY COMPROMISED\n"
                                                                "Any 'jailbreak' app can access any other app's keychain data "
-                                                               "(and steal your bitcoins). "
+                                                               "(and steal your dash). "
                                                                "Wipe this wallet immediately and restore on a secure device.", nil)
                                      preferredStyle:UIAlertControllerStyleAlert];
         UIAlertAction* ignoreButton = [UIAlertAction
@@ -480,7 +454,7 @@
                                      alertControllerWithTitle:NSLocalizedString(@"WARNING", nil)
                                      message:NSLocalizedString(@"DEVICE SECURITY COMPROMISED\n"
                                                                "Any 'jailbreak' app can access any other app's keychain data "
-                                                               "(and steal your bitcoins).", nil)
+                                                               "(and steal your dash).", nil)
                                      preferredStyle:UIAlertControllerStyleAlert];
         UIAlertAction* ignoreButton = [UIAlertAction
                                        actionWithTitle:NSLocalizedString(@"ignore", nil)
@@ -553,7 +527,7 @@
         manager.dashFormat.maximum = @(MAX_MONEY/DUFFS);
     }
     
-    if (manager.noWallet) {
+    if (manager.noWallet && manager.noOldWallet) {
         if (! manager.passcodeEnabled) {
             UIAlertController * alert = [UIAlertController
                                          alertControllerWithTitle:NSLocalizedString(@"turn device passcode on", nil)
@@ -600,17 +574,17 @@
                                                      exit(0);
                                                  }];
                     UIAlertAction* enterButton = [UIAlertAction
-                                                   actionWithTitle:NSLocalizedString(@"enter", nil)
-                                                   style:UIAlertActionStyleDefault
-                                                   handler:^(UIAlertAction * action) {
-                                                       [self protectedViewDidAppear];
-                                                   }];
+                                                  actionWithTitle:NSLocalizedString(@"enter", nil)
+                                                  style:UIAlertActionStyleDefault
+                                                  handler:^(UIAlertAction * action) {
+                                                      [self protectedViewDidAppear];
+                                                  }];
                     [alert addAction:exitButton];
                     [alert addAction:enterButton]; //ok button should be on the right side as per Apple guidelines, as reset is the less desireable option
                 } else {
                     __block NSUInteger wait = [manager lockoutWaitTime];
                     NSString * waitTime = [NSString waitTimeFromNow:wait];
-
+                    
                     alert = [UIAlertController
                              alertControllerWithTitle:NSLocalizedString(@"failed wallet update", nil)
                              message:[NSString stringWithFormat:NSLocalizedString(@"\ntry again in %@", nil),
@@ -637,11 +611,11 @@
                                                       }];
                                                   }];
                     UIAlertAction* exitButton = [UIAlertAction
-                                               actionWithTitle:NSLocalizedString(@"exit", nil)
-                                               style:UIAlertActionStyleDefault
-                                               handler:^(UIAlertAction * action) {
-                                                   exit(0);
-                                               }];
+                                                 actionWithTitle:NSLocalizedString(@"exit", nil)
+                                                 style:UIAlertActionStyleDefault
+                                                 handler:^(UIAlertAction * action) {
+                                                     exit(0);
+                                                 }];
                     [alert addAction:resetButton];
                     [alert addAction:exitButton]; //ok button should be on the right side as per Apple guidelines, as reset is the less desireable option
                 }
@@ -1201,7 +1175,7 @@
     [[NSBundle mainBundle] loadNibNamed:@"BREventConfirmView" owner:nil options:nil][0];
     view.titleLabel.text = NSLocalizedString(@"Buy dash in dashwallet!", nil);
     view.descriptionLabel.text =
-    NSLocalizedString(@"You can now buy bitcoin in\nbreadwallet with cash or\nbank transfer.", nil);
+    NSLocalizedString(@"You can now buy dash in\ndashwallet with cash or\nbank transfer.", nil);
     [view.okBtn setTitle:NSLocalizedString(@"Try It!", nil) forState:UIControlStateNormal];
     
     view.image = blurredBgImg;
@@ -1369,11 +1343,12 @@
                   if (! manager.didAuthenticate) {
                       item.rightBarButtonItem = rightButton;
                       if (self.shouldShowTips) item.titleView = titleView;
-                  }
-                  if ([[(id)to topViewController] respondsToSelector:@selector(updateTitleView)]) {
-                      [[(id)to topViewController] performSelector:@selector(updateTitleView)];
                   } else {
-                      item.title = self.navigationItem.title;
+                      if ([[(id)to topViewController] respondsToSelector:@selector(updateTitleView)]) {
+                          [[(id)to topViewController] performSelector:@selector(updateTitleView)];
+                      } else {
+                          item.title = self.navigationItem.title;
+                      }
                   }
                   item.leftBarButtonItem.image = [UIImage imageNamed:@"x"];
                   [containerView addSubview:to.view];

@@ -417,7 +417,7 @@ error:(NSError *)error
     if (amount < manager.wallet.minOutputAmount) {
         UIAlertController * alert = [UIAlertController
                                      alertControllerWithTitle:NSLocalizedString(@"amount too small", nil)
-                                     message:[NSString stringWithFormat:NSLocalizedString(@"bitcoin payments can't be less than %@", nil),
+                                     message:[NSString stringWithFormat:NSLocalizedString(@"dash payments can't be less than %@", nil),
                                               [manager stringForDashAmount:manager.wallet.minOutputAmount]]
                                      preferredStyle:UIAlertControllerStyleAlert];
         UIAlertAction* okButton = [UIAlertAction
@@ -438,6 +438,11 @@ error:(NSError *)error
     
     receiveController.paymentRequest = self.paymentRequest;
     receiveController.paymentRequest.amount = amount;
+    NSNumber *number = [manager localCurrencyNumberForDashAmount:amount];
+    if (number) {
+        receiveController.paymentRequest.currencyAmount = number.stringValue;
+    }
+    receiveController.paymentRequest.currency = manager.localCurrencyCode;
     receiveController.view.backgroundColor = self.parentViewController.parentViewController.view.backgroundColor;
     navController.delegate = receiveController;
     [navController pushViewController:receiveController animated:YES];
