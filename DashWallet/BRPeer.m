@@ -639,6 +639,16 @@ services:(uint64_t)services
     //else if ([MSG_GOVOBJVOTE isEqual:type]) [self acceptGov:message];
     else if ([MSG_GOVOBJ isEqual:type]) [self acceptGovObjectMessage:message];
     //else if ([MSG_GOVOBJSYNC isEqual:type]) [self acceptGovObjectSyncMessage:message];
+    
+    //private send
+    else if ([MSG_DARKSENDANNOUNCE isEqual:type]) [self acceptDarksendAnnounceMessage:message];
+    else if ([MSG_DARKSENDCONTROL isEqual:type]) [self acceptDarksendControlMessage:message];
+    else if ([MSG_DARKSENDFINISH isEqual:type]) [self acceptDarksendFinishMessage:message];
+    else if ([MSG_DARKSENDINITIATE isEqual:type]) [self acceptDarksendInitiateMessage:message];
+    else if ([MSG_DARKSENDQUORUM isEqual:type]) [self acceptDarksendQuorumMessage:message];
+    else if ([MSG_DARKSENDSESSION isEqual:type]) [self acceptDarksendSessionMessage:message];
+    else if ([MSG_DARKSENDSESSIONUPDATE isEqual:type]) [self acceptDarksendSessionUpdateMessage:message];
+    else if ([MSG_DARKSENDTX isEqual:type]) [self acceptDarksendTransactionMessage:message];
 
     else {
 #if DROP_MESSAGE_LOGGING
@@ -1235,6 +1245,78 @@ services:(uint64_t)services
 - (void)acceptGovObjectSyncMessage:(NSData *)message
 {
 
+}
+
+// MARK: - Accept Dark send
+
+- (void)acceptDarksendAnnounceMessage:(NSData *)message
+{
+    
+}
+
+- (void)acceptDarksendControlMessage:(NSData *)message
+{
+    
+}
+
+- (void)acceptDarksendFinishMessage:(NSData *)message
+{
+    
+}
+
+- (void)acceptDarksendInitiateMessage:(NSData *)message
+{
+    
+}
+
+- (void)acceptDarksendQuorumMessage:(NSData *)message
+{
+    
+}
+
+- (void)acceptDarksendSessionMessage:(NSData *)message
+{
+    
+}
+
+- (void)acceptDarksendSessionUpdateMessage:(NSData *)message
+{
+    
+}
+
+- (void)acceptDarksendTransactionMessage:(NSData *)message
+{
+    BRTransaction *tx = [BRTransaction transactionWithMessage:message];
+    
+    if (! tx) {
+        [self error:@"malformed tx message: %@", message];
+        return;
+    }
+    else if (! self.sentFilter && ! self.sentTxAndBlockGetdata) {
+        [self error:@"got tx message before loading a filter"];
+        return;
+    }
+    
+    NSLog(@"%@:%u got tx %@", self.host, self.port, uint256_obj(tx.txHash));
+    
+    dispatch_async(self.delegateQueue, ^{
+        [self.delegate peer:self relayedTransaction:tx];
+    });
+    
+    if (self.currentBlock) { // we're collecting tx messages for a merkleblock
+        [self.currentBlockTxHashes removeObject:uint256_obj(tx.txHash)];
+        
+        if (self.currentBlockTxHashes.count == 0) { // we received the entire block including all matched tx
+            BRMerkleBlock *block = self.currentBlock;
+            
+            self.currentBlock = nil;
+            self.currentBlockTxHashes = nil;
+            
+            dispatch_sync(self.delegateQueue, ^{ // syncronous dispatch so we don't get too many queued up tx
+                [self.delegate peer:self relayedBlock:block];
+            });
+        }
+    }
 }
 
 // MARK: - hash

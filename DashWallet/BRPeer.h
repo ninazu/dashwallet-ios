@@ -73,7 +73,7 @@
 
 //Control
 
-#define MSG_SPORK     @"spork"
+#define MSG_SPORK      @"spork"
 #define MSG_GETSPORKS  @"getsporks"
 
 //Masternode
@@ -92,6 +92,17 @@
 #define MSG_GOVOBJ      @"govobj"
 #define MSG_GOVOBJVOTE  @"govobjvote"
 #define MSG_GOVOBJSYNC  @"govsync"
+
+//Private send
+
+#define MSG_DARKSENDANNOUNCE       @"dsa"
+#define MSG_DARKSENDCONTROL        @"dsc"
+#define MSG_DARKSENDFINISH         @"dsf"
+#define MSG_DARKSENDINITIATE       @"dsi"
+#define MSG_DARKSENDQUORUM         @"dsq"
+#define MSG_DARKSENDSESSION        @"dss"
+#define MSG_DARKSENDSESSIONUPDATE  @"dssu"
+#define MSG_DARKSENDTX             @"dstx"
 
 #define REJECT_INVALID     0x10 // transaction is invalid for some reason (invalid signature, output value > input, etc)
 #define REJECT_SPENT       0x12 // an input is already spent
